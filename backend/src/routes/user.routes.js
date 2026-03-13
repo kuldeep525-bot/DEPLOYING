@@ -6,7 +6,7 @@ import {
   register,
   resetPassword,
   Userdelete,
-  updateProfile
+  updateProfile,
 } from "../controllers/user.controller.js";
 import {
   registerValidations,
@@ -35,29 +35,29 @@ router.post("/reset/:token", resetPassword);
 //google auth
 
 // Step 1: Redirect to Google
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }),
-);
+// router.get(
+//   "/google",
+//   passport.authenticate("google", { scope: ["profile", "email"] }),
+// );
 
 // Step 2: Google callback
-router.get(
-  "/google/callback",
-  passport.authenticate("google", { session: false }),
-  (req, res) => {
-    const token = jwt.sign({ userId: req.user._id }, SecretKey, {
-      expiresIn: "1d",
-    });
+// router.get(
+//   "/google/callback",
+//   passport.authenticate("google", { session: false }),
+//   (req, res) => {
+//     const token = jwt.sign({ userId: req.user._id }, SecretKey, {
+//       expiresIn: "1d",
+//     });
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-    });
+//     res.cookie("jwt", token, {
+//       httpOnly: true,
+//       secure: false,
+//       sameSite: "lax",
+//       maxAge: 24 * 60 * 60 * 1000, // 1 day
+//     });
 
-    res.redirect(`http://localhost:5500/frontend/pages/dashboard.html`);
-  },
-);
+//     res.redirect(`http://localhost:5500/frontend/pages/dashboard.html`);
+//   },
+// );
 
 export default router;
