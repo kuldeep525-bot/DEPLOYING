@@ -1,0 +1,63 @@
+import express from "express";
+import {
+  forgotPassword,
+  login,
+  logout,
+  register,
+  resetPassword,
+  Userdelete,
+  updateProfile
+} from "../controllers/user.controller.js";
+import {
+  registerValidations,
+  validateLogin,
+} from "../validations/auth.validators.js";
+import { validate } from "../middleware/validate.middleware.js";
+import jwt from "jsonwebtoken";
+import passport from "passport";
+import { authenticate } from "../middleware/jwt.middleware.js";
+import { getMe } from "../controllers/auth.controller.js";
+import { protect } from "../middleware/auth.middleware.js";
+import { delBlocked } from "../middleware/block.middleware.js";
+const SecretKey = "studentMangement@_525";
+const router = express.Router();
+
+router.get("/me", protect, getMe);
+
+router.post("/register", registerValidations, validate, register);
+router.patch("/profile", authenticate, updateProfile);
+router.post("/login", validateLogin, validate, login);
+router.post("/logout", logout);
+router.put("/user/delete", authenticate, delBlocked, Userdelete);
+router.post("/forgot", forgotPassword);
+router.post("/reset/:token", resetPassword);
+
+//google auth
+
+// Step 1: Redirect to Google
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+);
+
+// Step 2: Google callback
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  (req, res) => {
+    const token = jwt.sign({ userId: req.user._id }, SecretKey, {
+      expiresIn: "1d",
+    });
+
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
+    res.redirect(`http://localhost:5500/frontend/pages/dashboard.html`);
+  },
+);
+
+export default router;
