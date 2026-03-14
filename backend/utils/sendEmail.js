@@ -10,7 +10,10 @@ export const sendEmail = async ({ to, subject, text }) => {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS, //yeh gmail password hai
     },
-    connectionTimeout: 10000,
+    tls: {
+      rejectUnauthorized: false,
+    },
+    connectionTimeout: 20000,
   });
 
   await transporter.sendMail({
