@@ -12,6 +12,7 @@ import cookieParser from "cookie-parser";
 import passport from "passport";
 
 const app = express();
+app.set("trust proxy", 1);
 const port = process.env.PORT || 6000;
 
 await connectdb();
