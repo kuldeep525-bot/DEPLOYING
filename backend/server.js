@@ -10,10 +10,23 @@ import adminRoutes from "./src/routes/admin.routes.js";
 import paperRoutes from "./src/routes/paper.routes.js";
 import cookieParser from "cookie-parser";
 import passport from "passport";
+import fs from "fs";
+import path from "path";
 
 const app = express();
 app.set("trust proxy", 1);
 const port = process.env.PORT || 6000;
+
+/* ================================
+   TEMP FOLDER CREATE (FOR MULTER)
+================================ */
+
+const tempDir = path.resolve("public/temp");
+
+if (!fs.existsSync(tempDir)) {
+  fs.mkdirSync(tempDir, { recursive: true });
+  console.log("Temp folder created:", tempDir);
+}
 
 await connectdb();
 

@@ -3,9 +3,9 @@ import fs from "fs"; //node.js bydefault:useful for unlink the file in our use
 
 //configuration to help file upload on the cloudinary
 cloudinary.config({
-  cloud_name: "dgzoqtcip",
-  api_key: "185963244988876",
-  api_secret: "3fudW7DXbp1EzXq-tGHQV1AAIvo",
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 export { cloudinary };
@@ -21,8 +21,6 @@ export const uploadOnCloudinary = async (localFilePath) => {
 
     // upload success → delete local file
     fs.unlinkSync(localFilePath);
-    console.log(response);
-    console.log("Local path:", localFilePath);
     return response; // controller handle karega
   } catch (error) {
     if (fs.existsSync(localFilePath)) {
