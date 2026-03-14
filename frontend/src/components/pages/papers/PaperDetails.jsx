@@ -388,7 +388,7 @@ const PaperDetails = () => {
   /* DOWNLOAD QUESTION */
   const handleDownloadQuestion = () => {
     window.open(
-      `http://localhost:4000/api/paper/dwnlQues/${paperId}`,
+      `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlQues/${paperId}`,
       "_blank"
     );
   };
@@ -396,7 +396,7 @@ const PaperDetails = () => {
   /* DOWNLOAD ANSWER */
  const handleDownloadAnswer = () => {
   window.open(
-    `http://localhost:4000/api/paper/dwnlAns/${paperId}`,
+    `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlAns/${paperId}`,
     "_blank"
   );
 };
