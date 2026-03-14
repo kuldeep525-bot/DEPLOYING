@@ -19,7 +19,7 @@ await connectdb();
 /* SIMPLE CORS */
 app.use(
   cors({
-    origin: ["http://localhost:5173", "deploying-cyan.vercel.app"],
+    origin: ["http://localhost:5173", "https://deploying-cyan.vercel.app"],
     credentials: true,
   }),
 );
