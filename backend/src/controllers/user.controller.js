@@ -93,7 +93,7 @@ export const login = async (req, res) => {
     const cookiesOption = {
       httpOnly: true, //frontend js cannot access
       secure: false,
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: 24 * 60 * 60 * 1000,
     };
 
@@ -127,7 +127,7 @@ export const logout = async (req, res) => {
     res.clearCookie("jwt", {
       httpOnly: true,
       secure: false,
-      sameSite: "lax",
+      sameSite: "none",
       path: "/",
     });
     res.status(201).json({ message: "Logout Successfully" });
