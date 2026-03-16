@@ -386,19 +386,45 @@ const PaperDetails = () => {
   }, [paperId]);
 
   /* DOWNLOAD QUESTION */
-  const handleDownloadQuestion = () => {
-    window.open(
-      `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlQues/${paperId}`,
-      "_blank"
-    );
-  };
+  // const handleDownloadQuestion = () => {
+  //   window.open(
+  //     `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlQues/${paperId}`,
+  //     "_blank"
+  //   );
+  // };
+
+  const handleDownloadQuestion = async () => {
+  try {
+    const res = await api.get(`/api/paper/dwnlQues/${paperId}`, {
+      responseType: "blob",
+    });
+
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    window.open(url);
+  } catch (err) {
+    toast.error("Download failed");
+  }
+};
 
   /* DOWNLOAD ANSWER */
- const handleDownloadAnswer = () => {
-  window.open(
-    `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlAns/${paperId}`,
-    "_blank"
-  );
+//  const handleDownloadAnswer = () => {
+//   window.open(
+//     `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlAns/${paperId}`,
+//     "_blank"
+//   );
+// };
+
+const handleDownloadAnswer = async () => {
+  try {
+    const res = await api.get(`/api/paper/dwnlAns/${paperId}`, {
+      responseType: "blob",
+    });
+
+    const url = window.URL.createObjectURL(new Blob([res.data]));
+    window.open(url);
+  } catch (err) {
+    toast.error("Download failed");
+  }
 };
 
   /* MOBILE CHECK */
