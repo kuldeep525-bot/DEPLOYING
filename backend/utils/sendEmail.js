@@ -51,22 +51,27 @@
 // // //   }
 // // // }
 
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const SibApiV3Sdk = require("@getbrevo/brevo");
-
 export const sendEmail = async ({ to, subject, text }) => {
-  const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-
-  apiInstance.setApiKey(
-    SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
-    process.env.BREVO_API_KEY,
-  );
-
-  await apiInstance.sendTransacEmail({
-    sender: { name: "StudentMgt Portal", email: process.env.EMAIL_USER },
-    to: [{ email: to }],
-    subject,
-    textContent: text,
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": process.env.BREVO_API_KEY,
+    },
+    body: JSON.stringify({
+      sender: { name: "StudentMgt Portal", email: process.env.EMAIL_USER },
+      to: [{ email: to }],
+      subject,
+      textContent: text,
+    }),
   });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.log("Brevo error:", data);
+    throw new Error(data.message || "Email send failed");
+  }
+
+  console.log("Email sent successfully:", data);
 };
