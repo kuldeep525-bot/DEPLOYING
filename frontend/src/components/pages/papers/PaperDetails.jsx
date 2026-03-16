@@ -386,46 +386,19 @@ const PaperDetails = () => {
   }, [paperId]);
 
   /* DOWNLOAD QUESTION */
-  // const handleDownloadQuestion = () => {
-  //   window.open(
-  //     `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlQues/${paperId}`,
-  //     "_blank"
-  //   );
-  // };
-
-  const handleDownloadQuestion = async () => {
-  try {
-    const res = await api.get(`/api/paper/dwnlQues/${paperId}`, {
-      responseType: "blob",
-    });
-
-    const url = window.URL.createObjectURL(new Blob([res.data]));
-    window.open(url);
-  } catch (err) {
-    toast.error("Download failed");
-  }
+  const handleDownloadQuestion = () => {
+  window.location.href =
+  `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlQues/${paperId}`;
 };
+
+
 
   /* DOWNLOAD ANSWER */
-//  const handleDownloadAnswer = () => {
-//   window.open(
-//     `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlAns/${paperId}`,
-//     "_blank"
-//   );
-// };
-
-const handleDownloadAnswer = async () => {
-  try {
-    const res = await api.get(`/api/paper/dwnlAns/${paperId}`, {
-      responseType: "blob",
-    });
-
-    const url = window.URL.createObjectURL(new Blob([res.data]));
-    window.open(url);
-  } catch (err) {
-    toast.error("Download failed");
-  }
+const handleDownloadAnswer = () => {
+  window.location.href =
+  `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlAns/${paperId}`;
 };
+
 
   /* MOBILE CHECK */
   const isMobile = () => /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
