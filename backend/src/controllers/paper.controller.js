@@ -244,7 +244,7 @@ A new payment request has been received that requires your approval.
 --- Payment Details ---
 User Name: ${user.name}
 User Email: ${user.email}
-Paper Title: ${paper.title}
+Paper Title: ${paper.subject}
 Paper ID: ${paper._id}
 Transaction ID: ${transactionId}
 
