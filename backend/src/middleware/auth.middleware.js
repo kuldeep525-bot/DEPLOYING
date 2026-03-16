@@ -1,8 +1,6 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.Model.js";
 
-const SecretKey = "studentMangement@_525";
-
 // import User from "../models/user.model.js";
 
 export const protect = async (req, res, next) => {
@@ -15,7 +13,7 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, SecretKey);
+    const decoded = jwt.verify(token, process.env.SecretKey);
 
     const user = await User.findById(decoded.userId).select("-password");
 
