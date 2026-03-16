@@ -7,6 +7,7 @@ import {
   resetPassword,
   Userdelete,
   updateProfile,
+  verifyOtp,
 } from "../controllers/user.controller.js";
 import {
   registerValidations,
