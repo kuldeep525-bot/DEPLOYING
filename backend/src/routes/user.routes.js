@@ -29,8 +29,9 @@ router.patch("/profile", authenticate, updateProfile);
 router.post("/login", validateLogin, validate, login);
 router.post("/logout", logout);
 router.put("/user/delete", authenticate, delBlocked, Userdelete);
-router.post("/forgot", forgotPassword);
-router.post("/reset/:token", resetPassword);
+router.post("/forgot-password", forgotPassword);
+router.post("/verify-otp", verifyOtp); // naya route
+router.post("/reset-password", resetPassword); // ab params nahi, body se aayega
 
 //google auth
 

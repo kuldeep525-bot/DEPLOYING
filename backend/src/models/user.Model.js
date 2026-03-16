@@ -57,14 +57,17 @@ const userSchema = new mongoose.Schema(
       default: false,
       index: true,
     },
-    resetToken: {
+
+    otp: {
       type: String,
-      default: "",
+      default: null,
       select: false,
     },
-    expiryToken: {
+    otpExpiry: {
       type: Date,
+      default: null,
     },
+
     pendingPayments: [
       {
         paper: {

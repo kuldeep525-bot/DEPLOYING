@@ -205,11 +205,121 @@ export const Userdelete = async (req, res) => {
   }
 };
 
+//token se nhi karenga
+
+// export const forgotPassword = async (req, res) => {
+//   try {
+//     //first hum body se email lnga or verify karenga
+//     const { email } = req.body;
+//     //email validation
+//     if (!email) {
+//       return res.status(400).json({ message: "Email is required" });
+//     }
+
+//     const user = await User.findOne({ email });
+
+//     if (!user) {
+//       return res
+//         .status(200)
+//         .json({ message: "if this email exists,a reset link has been sent" }); //Email Enumeration Protection
+//     }
+
+//     //secure resettoken generate by crypto
+//     const resetToken = crypto.randomBytes(32).toString("hex"); //32 bytes ka random secure token yeh token email me bhejna hai
+
+//     //reset token jo ki ab hash hoga or voh database me save hoga
+
+//     const hashToken = crypto
+//       .createHash("sha256")
+//       .update(resetToken)
+//       .digest("hex");
+
+//     //save token in database and validate upto 10 minutes
+//     user.resetToken = hashToken;
+//     user.expiryToken = Date.now() + 10 * 60 * 1000; //valid upto 10 minutes
+
+//     await user.save({ validateBeforeSave: false }); //validation skip kar ka save
+
+//     //now reset url banana
+//     const resetUrl = `https://deploying-cyan.vercel.app/reset-password/${resetToken}`;
+
+//     const message = `You requested a password reset to studentMgt.
+// Click the link below:
+// ${resetUrl}
+// This link will expire in 10 minutes.`;
+
+//     //ab hum email bhjenga user ko
+
+//     await sendEmail({
+//       to: user.email,
+//       subject: "Password Reset",
+//       text: message,
+//     });
+
+//     //final response
+//     res
+//       .status(200)
+//       .json({ message: "if this email exists,a reset link has been sent" });
+//   } catch (error) {
+//     console.log("error", error);
+//     return res.status(500).json({ message: "server error" });
+//   }
+// };
+
+// export const resetPassword = async (req, res) => {
+//   try {
+//     //token lna url se
+//     const { token } = req.params;
+//     const { password, confirmPassword } = req.body;
+
+//     //password validation
+//     if (!password || !confirmPassword) {
+//       return res.status(400).json({
+//         message: "Password and confirm password are required",
+//       });
+//     }
+
+//     if (password !== confirmPassword) {
+//       return res.status(400).json({
+//         message: "Passwords do not match",
+//       });
+//     }
+
+//     //token ko hash karna kyu ki db me hash token store hai
+//     const hashToken = crypto.createHash("sha256").update(token).digest("hex");
+
+//     //valid user find out
+
+//     const user = await User.findOne({
+//       resetToken: hashToken,
+//       expiryToken: { $gt: Date.now() },
+//     });
+
+//     //ab new password hash karo
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     //password update and token delete
+//     user.password = hashedPassword;
+//     user.resetToken = undefined; //token ko remove karna compulusry hai kyu ki ab koi bhi same link se nhi ja sakhta hai
+//     user.expiryToken = undefined;
+
+//     await user.save();
+//     res.status(200).json({
+//       message: "Password reset successful. Please login again.",
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json({ message: "server error" });
+//   }
+// };
+
+//otp se karenga password ko forgot karna ka liye
+
+// Forgot Password - OTP bhejo
 export const forgotPassword = async (req, res) => {
   try {
-    //first hum body se email lnga or verify karenga
     const { email } = req.body;
-    //email validation
+
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
     }
@@ -217,96 +327,100 @@ export const forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res
-        .status(200)
-        .json({ message: "if this email exists,a reset link has been sent" }); //Email Enumeration Protection
+      return res.status(200).json({ message: "If this email exists, OTP has been sent" });
     }
 
-    //secure resettoken generate by crypto
-    const resetToken = crypto.randomBytes(32).toString("hex"); //32 bytes ka random secure token yeh token email me bhejna hai
+    // 4 digit OTP generate karo
+    const otp = Math.floor(1000 + Math.random() * 9000).toString();
 
-    //reset token jo ki ab hash hoga or voh database me save hoga
+    // Hash karke save karo
+    const hashOtp = crypto.createHash("sha256").update(otp).digest("hex");
 
-    const hashToken = crypto
-      .createHash("sha256")
-      .update(resetToken)
-      .digest("hex");
+    user.otp = hashOtp;
+    user.otpExpiry = Date.now() + 10 * 60 * 1000; // 10 minutes
 
-    //save token in database and validate upto 10 minutes
-    user.resetToken = hashToken;
-    user.expiryToken = Date.now() + 10 * 60 * 1000; //valid upto 10 minutes
+    await user.save({ validateBeforeSave: false });
 
-    await user.save({ validateBeforeSave: false }); //validation skip kar ka save
-
-    //now reset url banana
-    const resetUrl = `https://deploying-cyan.vercel.app/reset-password/${resetToken}`;
-
-    const message = `You requested a password reset to studentMgt.
-Click the link below:
-${resetUrl}
-This link will expire in 10 minutes.`;
-
-    //ab hum email bhjenga user ko
+    const message = `Your StudentMgt password reset OTP is: ${otp}\n\nThis OTP will expire in 10 minutes.\n\nIf you did not request this, please ignore.`;
 
     await sendEmail({
       to: user.email,
-      subject: "Password Reset",
+      subject: "Password Reset OTP",
       text: message,
     });
 
-    //final response
-    res
-      .status(200)
-      .json({ message: "if this email exists,a reset link has been sent" });
+    res.status(200).json({ message: "If this email exists, OTP has been sent" });
+
   } catch (error) {
     console.log("error", error);
-    return res.status(500).json({ message: "server error" });
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
+// OTP Verify karo
+export const verifyOtp = async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+
+    const hashOtp = crypto.createHash("sha256").update(otp).digest("hex");
+
+    const user = await User.findOne({
+      email,
+      otp: hashOtp,
+      otpExpiry: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    res.status(200).json({ message: "OTP verified successfully" });
+
+  } catch (error) {
+    console.log("error", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Reset Password
 export const resetPassword = async (req, res) => {
   try {
-    //token lna url se
-    const { token } = req.params;
-    const { password, confirmPassword } = req.body;
+    const { email, otp, password, confirmPassword } = req.body;
 
-    //password validation
     if (!password || !confirmPassword) {
-      return res.status(400).json({
-        message: "Password and confirm password are required",
-      });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
     if (password !== confirmPassword) {
-      return res.status(400).json({
-        message: "Passwords do not match",
-      });
+      return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    //token ko hash karna kyu ki db me hash token store hai
-    const hashToken = crypto.createHash("sha256").update(token).digest("hex");
-
-    //valid user find out
+    const hashOtp = crypto.createHash("sha256").update(otp).digest("hex");
 
     const user = await User.findOne({
-      resetToken: hashToken,
-      expiryToken: { $gt: Date.now() },
+      email,
+      otp: hashOtp,
+      otpExpiry: { $gt: Date.now() },
     });
 
-    //ab new password hash karo
-    const hashedPassword = await bcrypt.hash(password, 10);
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
 
-    //password update and token delete
-    user.password = hashedPassword;
-    user.resetToken = undefined; //token ko remove karna compulusry hai kyu ki ab koi bhi same link se nhi ja sakhta hai
-    user.expiryToken = undefined;
+    user.password = await bcrypt.hash(password, 10);
+    user.otp = undefined;
+    user.otpExpiry = undefined;
 
     await user.save();
-    res.status(200).json({
-      message: "Password reset successful. Please login again.",
-    });
+
+    res.status(200).json({ message: "Password reset successful. Please login again." });
+
   } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "server error" });
+    console.log("error", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
