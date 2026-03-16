@@ -32,7 +32,6 @@ const NotesRoutes = () => {
       <Route path="/signup" element={<Signup />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password/:token" element={<ResetPassword />} />
       {/* Protected User Routes */}
       <Route
         path="/dashboard"

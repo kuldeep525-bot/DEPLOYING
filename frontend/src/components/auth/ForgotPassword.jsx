@@ -48,8 +48,10 @@
 import { useState } from "react";
 import api from "../../services/api";
 import { showSuccess, showError } from "../../utils/toast";
+import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
+    const navigate = useNavigate();
   const [step, setStep] = useState(1); // 1=email, 2=otp, 3=reset password
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
@@ -105,6 +107,7 @@ const ForgotPassword = () => {
       setOtp("");
       setPassword("");
       setConfirmPassword("");
+       navigate("/login");
     } catch {
       showError("Something went wrong");
     } finally {
