@@ -2,7 +2,7 @@ import cron from "node-cron";
 import Notes from "../models/notes.model.js";
 
 // Run daily at 2:00 AM
-cron.schedule("0 2 * * *", async () => {
+cron.schedule("0 2 0 * *", async () => {
   try {
     console.log("Running automatic cleanup job...");
 
