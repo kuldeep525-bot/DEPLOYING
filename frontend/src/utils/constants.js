@@ -1,1 +1,1 @@
-export const BASE_URL = "https://deploying-production-2fdb.up.railway.app";
+export const BASE_URL = "https://deploying-hsaq.onrender.com";
