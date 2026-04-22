@@ -332,6 +332,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../../../services/api";
 import QRCode from "qrcode";
+import { BASE_URL } from "../../../utils/constants";
 import { toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -387,16 +388,14 @@ const PaperDetails = () => {
 
   /* DOWNLOAD QUESTION */
   const handleDownloadQuestion = () => {
-  window.location.href =
-  `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlQues/${paperId}`;
+  window.location.href = `${BASE_URL}/api/paper/dwnlQues/${paperId}`;
 };
 
 
 
   /* DOWNLOAD ANSWER */
 const handleDownloadAnswer = () => {
-  window.location.href =
-  `https://deploying-production-2fdb.up.railway.app/api/paper/dwnlAns/${paperId}`;
+window.location.href = `${BASE_URL}/api/paper/dwnlAns/${paperId}`;
 };
 
 
